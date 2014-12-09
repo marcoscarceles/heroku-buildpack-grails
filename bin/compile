@@ -187,3 +187,9 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/grails.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 
+if [ -f ${BUILD_DIR}/cleanup ]; then
+  while read line
+  do
+    rm -rf "${BUILD_DIR}/${line}"
+  done < ${BUILD_DIR}/cleanup
+fi
