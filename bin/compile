@@ -187,16 +187,11 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/grails.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 
-echo "-----> MC - PWD $(pwd)"
-echo "-----> MC - LS $(ls)"
-echo "-----> MC - BD $(echo ${BUILD_DIR})"
-echo "-----> MC - LS $(ls ${BUILD_DIR})"
-
 if [ -f ${BUILD_DIR}/heroku-cleanup ]; then
   echo "-----> Detected heroku-cleanup file."
   while read line
   do
     echo "       Removing ${BUILD_DIR}/${line} ..."
     rm -rf "${BUILD_DIR}/${line}"
-  done < ${BUILD_DIR}/cleanup
+  done < ${BUILD_DIR}/heroku-cleanup
 fi
