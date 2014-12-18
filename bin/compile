@@ -81,11 +81,13 @@ if [ ! -f ${BUILD_DIR}/system.properties ]; then
 fi
 
 # install JDK
-javaVersion=$(detect_java_version ${BUILD_DIR})
-echo -n "-----> Installing OpenJDK ${javaVersion}..."
-install_java ${BUILD_DIR} ${javaVersion}
-jdk_overlay ${BUILD_DIR}
-echo "done"
+if [ -z "$JAVA_HOME" ]; then
+  javaVersion=$(detect_java_version ${BUILD_DIR})
+  echo -n "-----> Installing OpenJDK ${javaVersion}..."
+  install_java ${BUILD_DIR} ${javaVersion}
+  jdk_overlay ${BUILD_DIR}
+  echo "done"
+fi  
 
 cd $CACHE_DIR
 
@@ -141,12 +143,12 @@ fi
 
 COMPILECMD="$GRAILS_CMD -Divy.default.ivy.user.dir=$CACHE_DIR compile --non-interactive"
 echo "-----> Executing $COMPILECMD"
-eval "$COMPILECMD" | sed -u 's/^/       /'
+eval "$COMPILECMD" | sed 's/^/       /'
 check_build_status
 
 BUILDCMD="$GRAILS_CMD $BUILDCMD_OPT -Divy.default.ivy.user.dir=$CACHE_DIR war --non-interactive"
 echo "-----> Executing $BUILDCMD"
-eval "$BUILDCMD" | sed -u 's/^/       /'
+eval "$BUILDCMD" | sed 's/^/       /'
 check_build_status
 
 if [ ! -d server ] ; then
